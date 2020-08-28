@@ -1,17 +1,31 @@
-const mysql = require('mysql');
-const settings = require('../keys');
+const pool = require('../pool');
 const sql = require('../sql/auth_queries');
 
 exports.listAll = async (req, res) => {
-  const db = mysql.createConnection(settings.database_conn);
+ 
+  try {
+    pool.query(sql.list(), (err, response) => {
+      if (err) throw err;
+      if (response.length)
+        res.json(response)
+      res.end();
+    })
+  } catch (error) {
+    res.json({error})
+  }
 
-  db.query(sql.list(), (error, rows, fields) => {
-    if (error) {
-      console.log(error);
-    }
-    console.log(rows[0]);
-  });
-
-  res.end();
 }
 
+exports.getById = async (req, res) => {
+  try {
+    pool.query(sql.getUser(req.params.userId), (err, response) => {
+      if (err) throw err;
+      if (response.length)
+        res.json(response);
+      res.end()
+    })
+    
+  } catch (error) {
+    res.json({error})
+  }
+}

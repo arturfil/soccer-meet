@@ -16,6 +16,7 @@ app.get('/', (req, res) => {
   res.json({message: "funciona el api"})
 })
 
+app.use('/api/games', require('./routes/game'));
 app.use('/api/users', require('./routes/auth'));
 
 const port = process.env.PORT;
